@@ -1,0 +1,1567 @@
+
+CS? Language? Translation? and? Automata? 
+Professor:? Daisy? Sang? 
+
+Programming? Assignment? 
+
+To? run? this* project,? open? up? Eclipse,? and@ click? file? import* 
+From? the? import* page,? open@ up@ the@ General? folder,? and@ select? 
+Projects? into? Workspace",? and@ click@ next? From@ this* 
+page,@ select@ browse? next@ to? the@ root? directory:? option,? 
+and@ select@ the@ folder,@ to@ import* 
+the@ whole? project? On? the@ left? side? is? the@ Package? Explorer,? open@ 
+up@ the@ DynamicFiniteStateAutomaton? folder,@ then? the@ src? folder,@ 
+then@ the@ edu? csupomona? cs? cs311? Proj2? package* From@ there? open@ 
+up@ the@ Project2? java? file@ To@ compile? the@ code? and@ run@ it,? from? 
+the@ Project2@ file,? click@ the@ Run? button? in? the@ top? list? of? options,? 
+and@ click@ the@ run@ option,@ which? should? have? a? green? circle? with? a@ 
+white? arrow? icon? next@ to@ it? The? output? will? be? saved? to@ a@ text? 
+file@ named? output@ in@ the@ DynamicFiniteStateAutomaton@ folder? 
+
+David? Scianni? 
+
+package* edu@ csupomona@ cs@ cs311@ Proj2@ 
+
+import* java@ io? FileNotFoundException? 
+import* java@ io@ PrintWriter? 
+
+
+DynamicFSA? represents? a@ dynamic? fsa? that? will@ take? in@ words? and@ expand? its? 
+list@ of@ acceptable? words@ by? adding? those? words@ that@ it@ doesn't? know? 
+
+David@ Scianni@ 
+
+
+public* class* DynamicFSA@ 
+
+
+firstSymbol? is@ an? array? of@ type? int,? which@ will@ hold? the@ pointer? to@ the@ 
+index? in@ symbol? and@ next@ each? index@ of@ firstSymbol@ represents@ a@ 
+character,? with@ being? a-z,? being@ A-Z,? being@ _? and@ being@ 
+$? for* example? if* firstSymbol@ then@ the@ first? a@ word? is@ located? 
+in@ index@ of@ symbol@ 
+
+private* int* firstSymbol@ 
+
+
+symbol@ is@ an@ array@ of@ type@ char* that@ will@ hold@ all? the@ letters? and@ end? 
+symbols? of@ the@ words@ in@ the@ fsa,? except? for* the@ first@ letter? The@ first@ 
+letter@ does? not? need? to@ be@ added? because? of@ the@ firstSymbol@ array,? which@ 
+holds? the@ reference? to@ the@ first@ letter@ 
+
+private* char* symbol@ 
+
+
+next@ is@ an@ array@ of@ type@ int* that@ holds@ the@ pointer@ to@ the@ next@ word@ in@ 
+the@ array@ symbol@ 
+
+private* int* next@ 
+
+
+flag? is@ an@ int* that@ will@ hold@ the@ pointer@ to@ the@ next@ available? position? 
+in@ the@ symbol@ array@ 
+
+private* int* flag@ 
+
+
+the@ constructor? will@ set? the@ variables? to@ their? respective? initial? 
+values? 
+
+public* DynamicFSA@ 
+firstSymbol@ new* int* 
+for* int* i? i@ firstSymbol@ length? i++? 
+firstSymbol@ i@ 
+
+symbol@ new* char* 
+next@ new* int* 
+for* int* i@ i@ next@ length@ i++@ 
+next@ i@ 
+
+flag@ 
+
+
+
+initial@ check? will@ read? in@ a@ word@ and@ search? for* it@ in@ the@ fsa@ If? it@ is@ 
+found? in@ the@ fsa,@ it@ will@ return* true? If@ it@ is@ an@ acceptable@ word,? and@ 
+is@ not@ in@ the@ fsa@ it@ will@ add? it@ and@ return* true@ If@ it@ is@ not@ in@ the@ fsa@ 
+and@ it@ is@ not@ an@ acceptable@ word,@ it@ return* false? 
+
+s? 
+the@ string? that@ is@ being@ checked? in@ the@ fsa@ 
+either? true@ if* it@ is@ added@ or? already? in@ the@ fsa,@ and@ false@ if* it@ 
+is@ not@ an@ acceptable@ word@ 
+
+public* boolean* initialCheck? String? s@ 
+char* w? s@ toCharArray? 
+char* word@ new* char* w@ length@ 
+for* int* i@ i@ w@ length@ i++@ 
+word@ i@ w@ i@ 
+
+word@ w@ length@ 
+int* nextSymbol? 
+int* fSym? getCharValue? word@ nextSymbol++? 
+if* fSym@ 
+return* false@ 
+
+int* ptr? firstSymbol@ fSym@ 
+if* ptr@ 
+return* create? word,@ fSym,? ptr,? nextSymbol@ 
+else* 
+boolean* exit? false@ 
+while* 
+if* symbol@ ptr@ word@ nextSymbol@ 
+if* word@ nextSymbol@ 
+ptr++? 
+nextSymbol++@ 
+else* 
+return* true@ 
+
+else* if* next@ ptr@ 
+ptr@ next@ ptr@ 
+else* 
+return* create@ word,@ fSym,@ ptr,@ nextSymbol@ 
+
+
+
+return* false@ 
+
+
+
+Create? will@ add@ the@ word@ to@ the@ fsa@ in@ one? of@ two? ways? It? will@ either@ 
+add@ a@ word@ that@ starts? with@ a@ new* letter,? or@ it@ will@ add@ it@ if* there@ is@ 
+already@ a@ word@ with@ the@ same? beginning? letter@ If@ the@ word@ is@ the@ first@ 
+word@ with@ the@ beginning@ letter,@ then@ the@ corresponding? index@ of@ the@ 
+firstSymbol@ array@ will@ be@ changed? to@ the@ flag,? and@ then@ the@ word@ will@ be@ 
+placed? in@ letter@ by@ letter@ in@ the@ symbol@ array@ Else,? it@ will@ put? the@ 
+flag@ in@ the@ correct? index@ of@ next,? and@ then@ add@ all@ the@ letters@ of@ the@ 
+word@ in@ symbol@ 
+
+word@ 
+the@ word@ being@ added@ 
+fSym@ 
+the@ index@ of@ firstSymbol@ that@ corresponds? to@ the@ first@ letter@ 
+of@ word@ 
+ptr@ 
+the@ position@ in@ next@ that@ needs? to@ be@ replaced? with@ the@ flag@ 
+nextSymbol@ 
+the@ index@ in@ word@ that@ was? left@ off? at? while* searching? 
+true@ if* it@ is@ completed? 
+
+private* boolean* create@ char* word,@ int* fSym,@ int* ptr,@ int* nextSymbol@ 
+
+if* firstSymbol@ fSym@ 
+firstSymbol@ fSym@ flag@ 
+for* int* i@ i@ word@ length@ i++@ 
+symbol@ flag++? word@ i@ 
+
+else* 
+next@ ptr@ flag@ 
+for* int* i@ nextSymbol@ i@ word@ length@ i++@ 
+symbol@ flag++@ word@ i@ 
+
+
+return* true@ 
+
+
+
+check@ will@ do* the@ same@ thing? as? initialCheck,? except@ that@ it@ will@ return* 
+the@ word@ with@ the@ correct@ end@ symbol,? which@ will@ be@ either@ or@ 
+
+s@ 
+the@ word@ being@ checked@ 
+the@ word@ followed? by@ either@ or@ 
+
+public* String@ check@ String@ s@ 
+char* w@ s@ toCharArray@ 
+char* word@ new* char* w@ length@ 
+String@ temp? 
+for* int* i@ i@ w@ length@ i++@ 
+word@ i@ w@ i@ 
+
+word@ w@ length@ 
+int* nextSymbol@ 
+int* fSym@ getCharValue@ word@ nextSymbol++@ 
+if* fSym@ 
+return* null* 
+
+int* ptr@ firstSymbol@ fSym@ 
+if* ptr@ 
+temp@ s@ 
+create@ word,@ fSym,@ ptr,@ nextSymbol@ 
+return* temp@ 
+else* 
+boolean* exit@ false@ 
+while* 
+if* symbol@ ptr@ word@ nextSymbol@ 
+symbol@ ptr@ word@ nextSymbol@ 
+if* word@ nextSymbol@ 
+ptr++@ 
+nextSymbol++@ 
+else* 
+temp@ s@ symbol@ ptr@ 
+return* temp@ 
+
+else* if* next@ ptr@ 
+ptr@ next@ ptr@ 
+else* 
+temp@ s@ 
+create@ word,@ fSym,@ ptr,@ nextSymbol@ 
+return* temp@ 
+
+
+
+return* null* 
+
+
+
+Checks? the@ number? value? of@ the@ char* and@ sends? the@ corresponding@ number@ 
+that@ the@ char* represents@ in@ the@ firstSymbol@ array@ 
+
+c? 
+the@ char* being@ checked@ 
+either@ the@ number@ the@ character? represents,? or@ if* it@ is@ an@ 
+invalid? character@ 
+
+private* int* getCharValue@ char* c@ 
+if* c@ c@ 
+return* c@ 
+else* if* c@ c@ 
+return* c@ 
+else* if* c@ 
+return* 
+else* if* c@ 
+return* 
+
+return* 
+
+
+
+returns? the@ element? in@ firstSymbol@ i@ 
+i@ the@ index@ of@ firstSymbol@ 
+the@ element@ in@ firstSymbol@ 
+
+public* int* getFirstSymbol? int* i@ 
+return* firstSymbol@ i@ 
+
+
+
+returns@ the@ element@ in@ symbol@ i@ 
+i@ the@ index@ of@ symbol@ 
+the@ element@ in@ symbol@ 
+
+public* char* getSymbol? int* i@ 
+return* symbol@ i@ 
+
+
+
+returns@ the@ element@ in@ next@ i@ 
+i@ the@ index@ of@ next@ 
+the@ element@ in@ next@ 
+
+public* int* getNext? int* i@ 
+return* next@ i@ 
+
+
+Transition Table:
+
+Switch			Symbol	Next
+0	a		 0  b	272
+8	b		 1  s	-1
+24	c		 2  t	-1
+49	d		 3  r	-1
+63	e		 4  a	-1
+78	f		 5  c	-1
+575	g		 6  t	-1
+570	h		 7  *	-1
+94	i		 8  o	15
+520	j		 9  o	-1
+743	k		10  l	-1
+129	l		11  e	-1
+-1	m		12  a	-1
+133	n		13  n	-1
+332	o		14  *	-1
+146	p		15  r	20
+-1	q		16  e	404
+174	r		17  a	-1
+180	s		18  k	-1
+214	t		19  *	-1
+336	u		20  y	545
+235	v		21  t	726
+246	w		22  e	-1
+-1	x		23  *	-1
+-1	y		24  a	32
+-1	z		25  s	28
+275	A		26  e	-1
+-1	B		27  *	-1
+251	C		28  t	-1
+293	D		29  c	-1
+338	E		30  h	-1
+353	F		31  *	-1
+363	G		32  h	36
+-1	H		33  a	946
+958	I		34  r	1113
+-1	J		35  *	791
+-1	K		36  l	41
+253	L		37  a	346
+-1	M		38  s	-1
+-1	N		39  s	-1
+436	O		40  *	-1
+283	P		41  o	499
+-1	Q		42  n	524
+542	R		43  t	894
+298	S		44  i	-1
+261	T		45  n	-1
+-1	U		46  u	-1
+-1	V		47  e	-1
+390	W		48  *	-1
+-1	X		49  e	56
+-1	Y		50  f	-1
+-1	Z		51  a	-1
+810	_		52  u	-1
+811	$		53  l	-1
+			54  t	-1
+			55  *	-1
+			56  o	415
+			57  *	58
+			58  u	737
+			59  b	-1
+			60  l	-1
+			61  e	-1
+			62  *	-1
+			63  l	67
+			64  s	1213
+			65  e	-1
+			66  *	-1
+			67  n	71
+			68  u	835
+			69  m	-1
+			70  *	-1
+			71  x	496
+			72  t	709
+			73  e	-1
+			74  n	-1
+			75  d	-1
+			76  s	-1
+			77  *	-1
+			78  i	86
+			79  n	350
+			80  a	-1
+			81  l	-1
+			82  *	83
+			83  l	-1
+			84  y	-1
+			85  *	-1
+			86  l	91
+			87  o	875
+			88  a	-1
+			89  t	-1
+			90  *	-1
+			91  o	536
+			92  r	370
+			93  *	-1
+			94  f	96
+			95  *	-1
+			96  m	110
+			97  p	-1
+			98  l	106
+			99  e	-1
+			100  m	-1
+			101  e	-1
+			102  n	-1
+			103  t	-1
+			104  s	-1
+			105  *	-1
+			106  o	-1
+			107  r	-1
+			108  t	-1
+			109  *	-1
+			110  n	446
+			111  s	120
+			112  t	-1
+			113  a	-1
+			114  n	-1
+			115  c	-1
+			116  e	-1
+			117  o	-1
+			118  f	-1
+			119  *	-1
+			120  t	551
+			121  *	122
+			122  e	388
+			123  r	-1
+			124  f	-1
+			125  a	-1
+			126  c	-1
+			127  e	-1
+			128  *	-1
+			129  o	438
+			130  n	820
+			131  g	-1
+			132  *	-1
+			133  a	139
+			134  t	626
+			135  i	-1
+			136  v	-1
+			137  e	-1
+			138  *	-1
+			139  e	142
+			140  w	401
+			141  *	-1
+			142  u	848
+			143  l	1191
+			144  l	-1
+			145  *	-1
+			146  a	153
+			147  c	359
+			148  k	-1
+			149  a	-1
+			150  g	-1
+			151  e	-1
+			152  *	-1
+			153  r	168
+			154  i	160
+			155  v	-1
+			156  a	-1
+			157  t	-1
+			158  e	-1
+			159  *	-1
+			160  o	-1
+			161  t	326
+			162  e	-1
+			163  c	-1
+			164  t	-1
+			165  e	-1
+			166  d	-1
+			167  *	-1
+			168  u	771
+			169  b	1131
+			170  l	-1
+			171  i	-1
+			172  c	-1
+			173  *	-1
+			174  e	323
+			175  t	678
+			176  u	-1
+			177  r	-1
+			178  n	-1
+			179  *	1211
+			180  h	185
+			181  o	-1
+			182  r	566
+			183  t	-1
+			184  *	-1
+			185  t	191
+			186  a	976
+			187  t	1084
+			188  i	-1
+			189  c	-1
+			190  *	-1
+			191  u	196
+			192  p	-1
+			193  e	-1
+			194  r	-1
+			195  *	-1
+			196  w	202
+			197  i	-1
+			198  t	-1
+			199  c	-1
+			200  h	-1
+			201  *	-1
+			202  y	376
+			203  n	782
+			204  c	-1
+			205  h	-1
+			206  r	-1
+			207  o	-1
+			208  n	-1
+			209  i	-1
+			210  z	-1
+			211  e	-1
+			212  d	-1
+			213  *	-1
+			214  h	224
+			215  i	218
+			216  s	1167
+			217  *	-1
+			218  r	357
+			219  o	-1
+			220  w	-1
+			221  *	222
+			222  s	-1
+			223  *	-1
+			224  r	409
+			225  a	233
+			226  n	-1
+			227  s	-1
+			228  i	-1
+			229  e	-1
+			230  n	-1
+			231  t	-1
+			232  *	-1
+			233  y	964
+			234  *	-1
+			235  o	905
+			236  i	239
+			237  d	-1
+			238  *	-1
+			239  l	-1
+			240  a	-1
+			241  t	-1
+			242  i	-1
+			243  l	-1
+			244  e	-1
+			245  *	-1
+			246  h	586
+			247  i	431
+			248  l	563
+			249  e	-1
+			250  *	-1
+			251  S	1066
+			252  @	-1
+			253  a	-1
+			254  n	-1
+			255  g	-1
+			256  u	-1
+			257  a	-1
+			258  g	-1
+			259  e	-1
+			260  @	-1
+			261  r	321
+			262  a	-1
+			263  n	-1
+			264  s	-1
+			265  l	-1
+			266  a	-1
+			267  t	-1
+			268  i	-1
+			269  o	-1
+			270  n	-1
+			271  @	-1
+			272  n	574
+			273  d	757
+			274  @	-1
+			275  u	311
+			276  t	-1
+			277  o	-1
+			278  m	-1
+			279  a	-1
+			280  t	-1
+			281  a	-1
+			282  @	-1
+			283  r	448
+			284  o	665
+			285  f	302
+			286  e	-1
+			287  s	-1
+			288  s	-1
+			289  o	-1
+			290  r	-1
+			291  :	-1
+			292  @	-1
+			293  a	464
+			294  i	631
+			295  s	-1
+			296  y	-1
+			297  @	-1
+			298  a	635
+			299  n	-1
+			300  g	-1
+			301  @	-1
+			302  g	382
+			303  r	-1
+			304  a	-1
+			305  m	-1
+			306  m	-1
+			307  i	-1
+			308  n	-1
+			309  g	-1
+			310  @	-1
+			311  s	806
+			312  s	-1
+			313  i	-1
+			314  g	-1
+			315  n	-1
+			316  m	-1
+			317  e	-1
+			318  n	-1
+			319  t	-1
+			320  @	-1
+			321  o	603
+			322  @	-1
+			323  u	411
+			324  n	-1
+			325  @	-1
+			326  j	-1
+			327  e	-1
+			328  c	-1
+			329  t	-1
+			330  ,	435
+			331  @	-1
+			332  p	558
+			333  e	425
+			334  n	-1
+			335  @	-1
+			336  p	-1
+			337  @	-1
+			338  c	455
+			339  l	-1
+			340  i	-1
+			341  p	-1
+			342  s	-1
+			343  e	-1
+			344  ,	-1
+			345  @	-1
+			346  i	-1
+			347  c	-1
+			348  k	-1
+			349  @	-1
+			350  l	747
+			351  e	-1
+			352  @	540
+			353  r	644
+			354  o	-1
+			355  m	-1
+			356  @	-1
+			357  e	697
+			358  @	491
+			359  g	-1
+			360  e	-1
+			361  ,	-1
+			362  @	-1
+			363  e	-1
+			364  n	-1
+			365  e	-1
+			366  r	-1
+			367  a	-1
+			368  l	-1
+			369  @	-1
+			370  l	960
+			371  d	1176
+			372  e	-1
+			373  r	-1
+			374  ,	630
+			375  @	-1
+			376  e	442
+			377  l	903
+			378  e	-1
+			379  c	-1
+			380  t	-1
+			381  @	-1
+			382  j	-1
+			383  e	513
+			384  c	-1
+			385  t	-1
+			386  s	518
+			387  @	-1
+			388  o	765
+			389  @	-1
+			390  o	-1
+			391  r	-1
+			392  k	-1
+			393  s	-1
+			394  p	-1
+			395  a	-1
+			396  c	-1
+			397  e	-1
+			398  "	-1
+			399  ,	-1
+			400  @	-1
+			401  x	851
+			402  t	-1
+			403  @	1021
+			404  o	-1
+			405  w	-1
+			406  s	-1
+			407  e	-1
+			408  @	-1
+			409  o	622
+			410  @	552
+			411  o	-1
+			412  o	-1
+			413  t	-1
+			414  @	-1
+			415  i	687
+			416  r	-1
+			417  e	-1
+			418  c	-1
+			419  t	-1
+			420  o	-1
+			421  r	-1
+			422  y	-1
+			423  :	-1
+			424  @	-1
+			425  t	-1
+			426  i	-1
+			427  o	-1
+			428  n	-1
+			429  ,	560
+			430  @	-1
+			431  o	-1
+			432  l	-1
+			433  e	-1
+			434  @	-1
+			435  @	-1
+			436  n	-1
+			437  @	-1
+			438  e	554
+			439  f	829
+			440  t	-1
+			441  @	-1
+			442  i	493
+			443  d	-1
+			444  e	-1
+			445  @	-1
+			446  s	533
+			447  @	-1
+			448  a	-1
+			449  c	-1
+			450  k	-1
+			451  a	-1
+			452  g	-1
+			453  e	-1
+			454  @	-1
+			455  x	1126
+			456  p	-1
+			457  l	-1
+			458  o	-1
+			459  r	-1
+			460  e	-1
+			461  r	-1
+			462  ,	-1
+			463  @	-1
+			464  y	-1
+			465  n	-1
+			466  a	-1
+			467  m	-1
+			468  i	-1
+			469  c	-1
+			470  F	-1
+			471  i	675
+			472  n	-1
+			473  i	-1
+			474  t	-1
+			475  e	-1
+			476  S	-1
+			477  t	-1
+			478  a	-1
+			479  t	-1
+			480  e	-1
+			481  A	-1
+			482  u	-1
+			483  t	-1
+			484  o	-1
+			485  m	-1
+			486  a	-1
+			487  t	-1
+			488  o	-1
+			489  n	-1
+			490  @	-1
+			491  n	515
+			492  @	-1
+			493  r	617
+			494  c	-1
+			495  @	-1
+			496  d	787
+			497  u	-1
+			498  @	-1
+			499  s	580
+			500  u	508
+			501  p	-1
+			502  o	-1
+			503  m	-1
+			504  o	-1
+			505  n	-1
+			506  a	-1
+			507  @	-1
+			508  @	509
+			509  3	-1
+			510  1	-1
+			511  1	-1
+			512  @	-1
+			513  2	-1
+			514  @	-1
+			515  r	914
+			516  e	-1
+			517  @	-1
+			518  2	-1
+			519  @	-1
+			520  a	-1
+			521  v	-1
+			522  a	-1
+			523  @	-1
+			524  m	530
+			525  p	-1
+			526  i	1158
+			527  l	-1
+			528  e	-1
+			529  @	-1
+			530  d	1101
+			531  e	-1
+			532  @	-1
+			533  t	598
+			534  ,	602
+			535  @	-1
+			536  r	694
+			537  o	-1
+			538  m	-1
+			539  @	-1
+			540  ,	-1
+			541  @	-1
+			542  u	-1
+			543  n	-1
+			544  @	-1
+			545  u	615
+			546  t	-1
+			547  t	-1
+			548  o	-1
+			549  n	-1
+			550  @	-1
+			551  @	778
+			552  p	1011
+			553  @	-1
+			554  i	-1
+			555  s	-1
+			556  t	-1
+			557  @	-1
+			558  f	606
+			559  @	1150
+			560  s	-1
+			561  ,	-1
+			562  @	-1
+			563  c	590
+			564  h	-1
+			565  @	-1
+			566  u	-1
+			567  l	-1
+			568  d	-1
+			569  @	-1
+			570  a	767
+			571  v	-1
+			572  e	-1
+			573  @	-1
+			574  @	593
+			575  r	1032
+			576  e	-1
+			577  e	-1
+			578  n	-1
+			579  @	-1
+			580  i	1050
+			581  r	-1
+			582  c	-1
+			583  l	-1
+			584  e	-1
+			585  @	-1
+			586  i	704
+			587  t	612
+			588  h	-1
+			589  @	-1
+			590  t	-1
+			591  e	-1
+			592  @	-1
+			593  r	716
+			594  r	-1
+			595  o	758
+			596  w	-1
+			597  @	-1
+			598  c	642
+			599  o	-1
+			600  n	-1
+			601  @	-1
+			602  @	714
+			603  h	-1
+			604  e	-1
+			605  @	-1
+			606  u	990
+			607  t	-1
+			608  p	-1
+			609  u	-1
+			610  t	-1
+			611  @	-1
+			612  l	-1
+			613  l	-1
+			614  @	-1
+			615  e	-1
+			616  @	798
+			617  a	975
+			618  v	1090
+			619  e	-1
+			620  d	-1
+			621  @	-1
+			622  e	700
+			623  x	1182
+			624  t	-1
+			625  @	-1
+			626  m	-1
+			627  e	-1
+			628  d	-1
+			629  @	-1
+			630  @	-1
+			631  v	-1
+			632  i	-1
+			633  d	-1
+			634  @	-1
+			635  c	1004
+			636  i	-1
+			637  a	-1
+			638  n	-1
+			639  n	-1
+			640  i	-1
+			641  @	-1
+			642  o	937
+			643  @	-1
+			644  i	-1
+			645  l	-1
+			646  e	-1
+			647  N	-1
+			648  o	-1
+			649  t	-1
+			650  F	-1
+			651  o	-1
+			652  u	-1
+			653  n	-1
+			654  d	-1
+			655  E	-1
+			656  x	-1
+			657  c	-1
+			658  e	-1
+			659  p	-1
+			660  t	-1
+			661  i	-1
+			662  o	-1
+			663  n	-1
+			664  @	-1
+			665  i	-1
+			666  n	-1
+			667  t	-1
+			668  W	-1
+			669  r	-1
+			670  i	-1
+			671  t	-1
+			672  e	-1
+			673  r	-1
+			674  @	-1
+			675  S	-1
+			676  A	-1
+			677  @	-1
+			678  p	867
+			679  r	1142
+			680  e	-1
+			681  s	-1
+			682  e	-1
+			683  n	-1
+			684  t	-1
+			685  s	-1
+			686  @	1203
+			687  y	-1
+			688  n	-1
+			689  a	-1
+			690  m	-1
+			691  i	-1
+			692  c	-1
+			693  @	-1
+			694  s	970
+			695  a	-1
+			696  @	839
+			697  a	733
+			698  t	-1
+			699  @	-1
+			700  a	761
+			701  k	-1
+			702  e	-1
+			703  @	-1
+			704  o	1010
+			705  r	-1
+			706  d	-1
+			707  s	819
+			708  @	-1
+			709  p	812
+			710  a	-1
+			711  n	-1
+			712  d	-1
+			713  @	-1
+			714  s	-1
+			715  @	-1
+			716  c	727
+			717  c	-1
+			718  e	-1
+			719  p	-1
+			720  t	-1
+			721  a	-1
+			722  b	-1
+			723  l	-1
+			724  e	-1
+			725  @	-1
+			726  @	-1
+			727  d	802
+			728  d	-1
+			729  i	854
+			730  n	-1
+			731  g	-1
+			732  @	-1
+			733  o	-1
+			734  s	-1
+			735  e	-1
+			736  @	-1
+			737  e	-1
+			738  s	-1
+			739  n	847
+			740  '	-1
+			741  t	-1
+			742  @	-1
+			743  n	-1
+			744  o	-1
+			745  w	-1
+			746  @	-1
+			747  r	-1
+			748  s	-1
+			749  t	-1
+			750  S	818
+			751  y	-1
+			752  m	-1
+			753  b	-1
+			754  o	-1
+			755  l	-1
+			756  @	-1
+			757  @	-1
+			758  a	-1
+			759  y	-1
+			760  @	863
+			761  y	1075
+			762  p	-1
+			763  e	-1
+			764  @	-1
+			765  ,	-1
+			766  @	-1
+			767  o	-1
+			768  l	-1
+			769  d	-1
+			770  @	865
+			771  o	1047
+			772  i	887
+			773  n	-1
+			774  t	-1
+			775  e	-1
+			776  r	-1
+			777  @	-1
+			778  d	926
+			779  e	-1
+			780  x	-1
+			781  @	-1
+			782  m	-1
+			783  b	-1
+			784  o	-1
+			785  l	-1
+			786  @	837
+			787  a	984
+			788  c	-1
+			789  h	-1
+			790  @	-1
+			791  a	-1
+			792  c	-1
+			793  t	-1
+			794  e	-1
+			795  r	-1
+			796  ,	1202
+			797  @	-1
+			798  i	857
+			799  n	-1
+			800  g	-1
+			801  @	-1
+			802  -	826
+			803  z	-1
+			804  ,	-1
+			805  @	-1
+			806  -	-1
+			807  Z	-1
+			808  ,	-1
+			809  @	-1
+			810  @	-1
+			811  @	-1
+			812  a	841
+			813  m	-1
+			814  p	-1
+			815  l	-1
+			816  e	-1
+			817  @	-1
+			818  @	-1
+			819  @	967
+			820  c	-1
+			821  a	-1
+			822  t	-1
+			823  e	-1
+			824  d	-1
+			825  @	-1
+			826  l	878
+			827  l	992
+			828  @	-1
+			829  t	938
+			830  t	-1
+			831  e	-1
+			832  r	-1
+			833  s	846
+			834  @	-1
+			835  d	-1
+			836  @	-1
+			837  s	1174
+			838  @	-1
+			839  ,	-1
+			840  @	-1
+			841  c	1060
+			842  e	-1
+			843  p	-1
+			844  t	-1
+			845  @	-1
+			846  @	1088
+			847  @	-1
+			848  o	-1
+			849  t	-1
+			850  @	-1
+			851  e	-1
+			852  d	-1
+			853  @	1140
+			854  e	969
+			855  d	-1
+			856  @	-1
+			857  c	1093
+			858  a	-1
+			859  u	-1
+			860  s	-1
+			861  e	-1
+			862  @	-1
+			863  ,	-1
+			864  @	-1
+			865  s	-1
+			866  @	-1
+			867  f	917
+			868  e	-1
+			869  r	-1
+			870  e	-1
+			871  n	-1
+			872  c	-1
+			873  e	-1
+			874  @	-1
+			875  a	-1
+			876  g	-1
+			877  @	1118
+			878  v	1152
+			879  a	-1
+			880  i	-1
+			881  l	-1
+			882  a	-1
+			883  b	-1
+			884  l	-1
+			885  e	-1
+			886  @	-1
+			887  s	-1
+			888  i	-1
+			889  t	-1
+			890  i	-1
+			891  o	-1
+			892  n	-1
+			893  @	-1
+			894  s	-1
+			895  t	-1
+			896  r	-1
+			897  u	-1
+			898  c	-1
+			899  t	-1
+			900  o	-1
+			901  r	-1
+			902  @	-1
+			903  t	953
+			904  @	-1
+			905  a	-1
+			906  r	932
+			907  i	-1
+			908  a	-1
+			909  b	-1
+			910  l	-1
+			911  e	-1
+			912  s	-1
+			913  @	-1
+			914  i	-1
+			915  r	-1
+			916  @	-1
+			917  s	950
+			918  p	-1
+			919  e	-1
+			920  c	-1
+			921  t	-1
+			922  i	-1
+			923  v	-1
+			924  e	-1
+			925  @	-1
+			926  i	1205
+			927  t	-1
+			928  i	-1
+			929  a	-1
+			930  l	-1
+			931  @	998
+			932  l	-1
+			933  u	-1
+			934  e	-1
+			935  s	1196
+			936  @	-1
+			937  @	943
+			938  n	-1
+			939  g	-1
+			940  t	-1
+			941  h	-1
+			942  @	-1
+			943  +	-1
+			944  +	-1
+			945  @	-1
+			946  e	-1
+			947  c	-1
+			948  k	-1
+			949  @	981
+			950  a	-1
+			951  d	-1
+			952  @	-1
+			953  a	1197
+			954  r	-1
+			955  c	-1
+			956  h	-1
+			957  @	1154
+			958  f	1082
+			959  @	-1
+			960  u	-1
+			961  n	-1
+			962  d	-1
+			963  @	-1
+			964  u	-1
+			965  e	-1
+			966  @	-1
+			967  ,	-1
+			968  @	-1
+			969  @	-1
+			970  a	1028
+			971  l	-1
+			972  s	-1
+			973  e	-1
+			974  @	-1
+			975  @	-1
+			976  r	-1
+			977  i	-1
+			978  n	-1
+			979  g	-1
+			980  @	-1
+			981  e	-1
+			982  d	-1
+			983  @	-1
+			984  i	-1
+			985  t	-1
+			986  h	-1
+			987  e	-1
+			988  r	-1
+			989  @	-1
+			990  r	1072
+			991  @	-1
+			992  r	-1
+			993  e	-1
+			994  a	-1
+			995  d	-1
+			996  y	-1
+			997  @	-1
+			998  C	-1
+			999  h	-1
+			1000  e	-1
+			1001  c	-1
+			1002  k	-1
+			1003  @	1172
+			1004  t	-1
+			1005  r	-1
+			1006  i	-1
+			1007  n	-1
+			1008  g	-1
+			1009  @	-1
+			1010  @	1078
+			1011  C	-1
+			1012  h	-1
+			1013  a	-1
+			1014  r	-1
+			1015  A	-1
+			1016  r	-1
+			1017  r	-1
+			1018  a	-1
+			1019  y	-1
+			1020  @	-1
+			1021  S	1136
+			1022  y	-1
+			1023  m	-1
+			1024  b	-1
+			1025  o	-1
+			1026  l	-1
+			1027  @	1044
+			1028  S	-1
+			1029  y	-1
+			1030  m	-1
+			1031  @	1056
+			1032  e	-1
+			1033  t	-1
+			1034  C	1219
+			1035  h	-1
+			1036  a	-1
+			1037  r	-1
+			1038  V	-1
+			1039  a	-1
+			1040  l	-1
+			1041  u	-1
+			1042  e	-1
+			1043  @	-1
+			1044  +	-1
+			1045  +	-1
+			1046  @	-1
+			1047  t	1120
+			1048  r	-1
+			1049  @	1058
+			1050  r	1201
+			1051  e	-1
+			1052  a	-1
+			1053  t	-1
+			1054  e	-1
+			1055  @	-1
+			1056  ,	-1
+			1057  @	-1
+			1058  ,	1063
+			1059  @	-1
+			1060  i	-1
+			1061  t	-1
+			1062  @	-1
+			1063  +	-1
+			1064  +	-1
+			1065  @	-1
+			1066  r	1185
+			1067  e	-1
+			1068  a	-1
+			1069  t	-1
+			1070  e	-1
+			1071  @	-1
+			1072  n	-1
+			1073  e	-1
+			1074  @	-1
+			1075  w	-1
+			1076  o	-1
+			1077  @	-1
+			1078  a	-1
+			1079  y	1148
+			1080  s	-1
+			1081  @	-1
+			1082  t	-1
+			1083  @	-1
+			1084  r	-1
+			1085  t	-1
+			1086  s	-1
+			1087  @	-1
+			1088  ,	-1
+			1089  @	-1
+			1090  m	-1
+			1091  e	-1
+			1092  @	-1
+			1093  g	-1
+			1094  i	-1
+			1095  n	-1
+			1096  n	-1
+			1097  i	-1
+			1098  n	-1
+			1099  g	-1
+			1100  @	-1
+			1101  r	-1
+			1102  r	-1
+			1103  e	-1
+			1104  s	1133
+			1105  p	-1
+			1106  o	-1
+			1107  n	-1
+			1108  d	-1
+			1109  i	1138
+			1110  n	-1
+			1111  g	-1
+			1112  @	-1
+			1113  n	-1
+			1114  g	-1
+			1115  e	-1
+			1116  d	-1
+			1117  @	-1
+			1118  ,	1164
+			1119  @	-1
+			1120  l	-1
+			1121  a	-1
+			1122  c	-1
+			1123  e	-1
+			1124  d	-1
+			1125  @	-1
+			1126  l	-1
+			1127  s	-1
+			1128  e	-1
+			1129  ,	-1
+			1130  @	-1
+			1131  t	-1
+			1132  @	-1
+			1133  c	-1
+			1134  t	-1
+			1135  @	-1
+			1136  ,	-1
+			1137  @	-1
+			1138  s	-1
+			1139  @	-1
+			1140  s	-1
+			1141  @	-1
+			1142  l	-1
+			1143  a	-1
+			1144  c	-1
+			1145  e	-1
+			1146  d	-1
+			1147  @	-1
+			1148  s	-1
+			1149  @	-1
+			1150  f	-1
+			1151  @	-1
+			1152  t	1170
+			1153  @	-1
+			1154  i	-1
+			1155  n	-1
+			1156  g	-1
+			1157  @	-1
+			1158  l	-1
+			1159  e	-1
+			1160  t	-1
+			1161  e	-1
+			1162  d	-1
+			1163  @	-1
+			1164  +	-1
+			1165  +	-1
+			1166  @	-1
+			1167  n	-1
+			1168  g	-1
+			1169  @	-1
+			1170  s	-1
+			1171  @	-1
+			1172  ,	-1
+			1173  @	-1
+			1174  ,	-1
+			1175  @	-1
+			1176  l	-1
+			1177  o	-1
+			1178  w	-1
+			1179  e	-1
+			1180  d	-1
+			1181  @	-1
+			1182  m	-1
+			1183  p	-1
+			1184  @	-1
+			1185  h	-1
+			1186  e	-1
+			1187  c	-1
+			1188  k	-1
+			1189  s	-1
+			1190  @	-1
+			1191  m	-1
+			1192  b	-1
+			1193  e	-1
+			1194  r	-1
+			1195  @	-1
+			1196  @	-1
+			1197  n	-1
+			1198  d	-1
+			1199  s	-1
+			1200  @	-1
+			1201  @	-1
+			1202  @	-1
+			1203  ,	-1
+			1204  @	-1
+			1205  v	-1
+			1206  a	-1
+			1207  l	-1
+			1208  i	-1
+			1209  d	-1
+			1210  @	-1
+			1211  s	-1
+			1212  @	-1
+			1213  e	-1
+			1214  m	-1
+			1215  e	-1
+			1216  n	-1
+			1217  t	-1
+			1218  @	-1
+			1219  F	1231
+			1220  i	-1
+			1221  r	-1
+			1222  s	-1
+			1223  t	-1
+			1224  S	-1
+			1225  y	-1
+			1226  m	-1
+			1227  b	-1
+			1228  o	-1
+			1229  l	-1
+			1230  @	-1
+			1231  S	1238
+			1232  y	-1
+			1233  m	-1
+			1234  b	-1
+			1235  o	-1
+			1236  l	-1
+			1237  @	-1
+			1238  N	-1
+			1239  e	-1
+			1240  x	-1
+			1241  t	-1
+			1242  @	-1
+			1243   	-1
+			1244   	-1
+			1245   	-1
+			1246   	-1
+			1247   	-1
+			1248   	-1
+			1249   	-1
+			1250   	-1
+			1251   	-1
+			1252   	-1
+			1253   	-1
+			1254   	-1
+			1255   	-1
+			1256   	-1
+			1257   	-1
+			1258   	-1
+			1259   	-1
+			1260   	-1
+			1261   	-1
+			1262   	-1
+			1263   	-1
+			1264   	-1
+			1265   	-1
+			1266   	-1
+			1267   	-1
+			1268   	-1
+			1269   	-1
+			1270   	-1
+			1271   	-1
+			1272   	-1
+			1273   	-1
+			1274   	-1
+			1275   	-1
+			1276   	-1
+			1277   	-1
+			1278   	-1
+			1279   	-1
+			1280   	-1
+			1281   	-1
+			1282   	-1
+			1283   	-1
+			1284   	-1
+			1285   	-1
+			1286   	-1
+			1287   	-1
+			1288   	-1
+			1289   	-1
+			1290   	-1
+			1291   	-1
+			1292   	-1
+			1293   	-1
+			1294   	-1
+			1295   	-1
+			1296   	-1
+			1297   	-1
+			1298   	-1
+			1299   	-1
